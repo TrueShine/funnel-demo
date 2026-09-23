@@ -1,0 +1,114 @@
+/* ── 색 · 글자 · 여백을 여기 한 곳에 모아둡니다 ───────────── */
+:root {
+  --bg:     #ffffff;   /* 배경   */
+  --fg:     #15161a;   /* 글자   */
+  --muted:  #6b7280;   /* 연한 글자 */
+  --accent: #ff385c;   /* 강조   */
+  --line:   #e8e9ec;   /* 경계선 */
+
+  --w: 720px;          /* 본문 폭   */
+  --gap: 96px;         /* 섹션 간격 */
+
+  --t1: 44px;          /* 제목 */
+  --t2: 19px;          /* 본문 */
+  --t3: 15px;          /* 설명 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0f12; --fg: #f2f3f5; --muted: #9aa1ad;
+    --accent: #ff5c7a; --line: #24262c;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic",
+               "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-size: var(--t2);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── 틀 ───────────────────────────────────────────────── */
+.wrap { width: 100%; max-width: var(--w); margin: 0 auto; padding: 0 20px; }
+
+.head {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.head .wrap { display: flex; align-items: center; justify-content: space-between; height: 62px; }
+.brand { font-weight: 700; text-decoration: none; letter-spacing: -0.01em; }
+.nav { display: flex; gap: 22px; }
+.nav a { font-size: var(--t3); color: var(--muted); text-decoration: none; }
+.nav a:hover { color: var(--fg); }
+
+section { padding: var(--gap) 0; }
+section + section { border-top: 1px solid var(--line); }
+
+h1 { font-size: var(--t1); line-height: 1.2; letter-spacing: -0.03em; margin: 0 0 14px; text-wrap: balance; }
+h2 { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+     color: var(--muted); margin: 0 0 28px; font-weight: 600; }
+h3 { font-size: var(--t2); margin: 0 0 6px; letter-spacing: -0.01em; }
+p  { margin: 0; }
+.muted { color: var(--muted); font-size: var(--t3); }
+.lead { font-size: 21px; color: var(--muted); margin-bottom: 34px; text-wrap: pretty; }
+
+/* ── 버튼 ─────────────────────────────────────────────── */
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn {
+  display: inline-block; padding: 13px 22px; border-radius: 10px;
+  text-decoration: none; font-size: var(--t3); font-weight: 600;
+  border: 1px solid var(--line); background: transparent; color: var(--fg);
+  cursor: pointer; transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+.btn:hover { transform: translateY(-1px); border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { filter: brightness(1.06); }
+
+/* ── 카드 ─────────────────────────────────────────────── */
+.grid { display: grid; gap: 14px; }
+.card { padding: 22px; border: 1px solid var(--line); border-radius: 14px; }
+.card.link { text-decoration: none; display: block; transition: border-color .12s ease, transform .12s ease; }
+.card.link:hover { border-color: var(--accent); transform: translateY(-2px); }
+.tag { display: inline-block; font-size: 12px; letter-spacing: .06em; color: var(--accent);
+       font-weight: 700; margin-bottom: 8px; }
+
+/* ── 폼 ───────────────────────────────────────────────── */
+.field { display: block; margin-bottom: 18px; }
+.field span { display: block; font-size: var(--t3); color: var(--muted); margin-bottom: 7px; }
+input, textarea {
+  width: 100%; padding: 13px 14px; font: inherit; font-size: var(--t3);
+  color: var(--fg); background: transparent;
+  border: 1px solid var(--line); border-radius: 10px;
+}
+input:hover, textarea:hover { border-color: var(--muted); }
+textarea { min-height: 120px; resize: vertical; }
+
+.foot { border-top: 1px solid var(--line); padding: 34px 0 56px; }
+.foot .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+.center { text-align: center; padding: 120px 0; }
+.big { font-size: 56px; line-height: 1; margin-bottom: 20px; }
+
+@media (max-width: 480px) {
+  :root { --t1: 33px; --gap: 64px; }
+  .lead { font-size: 18px; }
+  .nav { gap: 14px; }
+}
