@@ -16,8 +16,10 @@ export const metadata: Metadata = {
   },
 };
 
-// Clarity 프로젝트 ID 가 있을 때만 CCTV 를 답니다.
-const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID;
+// Clarity 프로젝트 ID 가 있고, 프로덕션 배포일 때만 CCTV 를 답니다.
+// 프리뷰 배포에는 봇/크롤러가 돌아다녀서 세션 데이터가 지저분해집니다.
+const clarityId =
+  process.env.VERCEL_ENV === "production" ? process.env.NEXT_PUBLIC_CLARITY_ID : undefined;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
