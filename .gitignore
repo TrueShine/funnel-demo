@@ -7,3 +7,9 @@ out/
 *.tsbuildinfo
 next-env.d.ts
 .omc/
+/dist/
+.vinext/
+.wrangler/
+.agents/
+.claude/
+skills-lock.json

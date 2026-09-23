@@ -35,25 +35,26 @@ http://localhost:3000 — 이때는 계수기가 **안 셉니다.** 배포해야
 2. VS Code 에서 `Ctrl + Shift + P` → 「Git: Clone」
 3. 이 폴더의 파일을 복사해 넣고 커밋 → 동기화
 
-## 3. Vercel 배포 + 계수기 켜기
+## 3. Cloudflare 배포 + 계수기 켜기
 
-1. vercel.com → **Continue with GitHub**
-2. Add New → Project → 이 저장소 Import → Deploy
-3. 배포가 끝나면 프로젝트 → **Analytics** → **Enable**
-   ★ 이걸 안 누르면 코드가 들어 있어도 안 셉니다.
+```
+npm run build
+npm run deploy
+```
+
+첫 배포 때 `npx wrangler login` 으로 로그인 창이 뜹니다. 끝나면 `funnel-demo.<계정>.workers.dev` 주소가 나옵니다.
+
+계수기(방문 수)를 켜려면:
+
+1. dash.cloudflare.com → **Analytics & Logs** → **Web Analytics** → 배포된 주소 추가
+2. 발급된 토큰을 `.env.local` 의 `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` 에 넣고 다시 `npm run build && npm run deploy`
 
 ## 4. CCTV(Clarity) 붙이기
 
 1. clarity.microsoft.com → 로그인 → 새 프로젝트 (이름 + 배포된 주소)
 2. 설정 → **Overview** 에서 **프로젝트 ID** 를 복사
-3. Vercel → 프로젝트 → Settings → Environment Variables 에 추가
-
-   | Key | Value | Type |
-   |---|---|---|
-   | `NEXT_PUBLIC_CLARITY_ID` | 복사한 ID | **Config** |
-
-   `NEXT_PUBLIC_` 으로 시작하니 Secret 이 아니라 **Config** 로 넣어야 저장됩니다.
-4. Deployments → 최신 배포 → **Redeploy** (환경변수는 다시 배포해야 반영됩니다)
+3. `.env.local` 에 `NEXT_PUBLIC_CLARITY_ID=복사한ID` 추가
+4. `npm run build && npm run deploy` (환경변수는 다시 빌드·배포해야 반영됩니다)
 
 내 컴퓨터에서 시험하려면 `.env.local` 에 같은 값을 넣으세요.
 
@@ -89,7 +90,7 @@ cp .env.example .env.local
 | 12쪽 | 코드가 어떻게 들어가는지 | `app/layout.tsx` 를 VS Code 로 열어 보여주기 |
 | 25쪽 | **실시간 녹화** | Clarity → 세션 레코딩 → Live. 수강생이 들어오면 바로 뜹니다 |
 | 26쪽 | **퍼널 숫자** | Clarity → 퍼널 → 미리 만들어둔 것 |
-| 아무 때나 | 방문자 수 | Vercel → Analytics |
+| 아무 때나 | 방문자 수 | Cloudflare 대시보드 → Web Analytics |
 
 > 실시간 녹화는 지연이 없습니다. 퍼널·히트맵 숫자는 몇 시간 걸립니다.
 
@@ -115,7 +116,7 @@ funnel-demo/
 
 | 이런 일이 | 이렇게 |
 |---|---|
-| Analytics 에 0 이다 | Enable 을 눌렀는지 · 배포된 주소로 열었는지. localhost 는 안 셉니다 |
+| Analytics 에 0 이다 | Web Analytics 에 주소를 등록하고 토큰을 넣은 뒤 다시 배포했는지 · 배포된 주소로 열었는지. localhost 는 안 셉니다 |
 | Clarity 에 아무것도 없다 | 환경변수를 넣고 **Redeploy** 했는지. 그 다음 폰으로 한 번 여세요 |
 | 둘 다 0 이다 | 광고 차단 확장이 막는 경우가 많습니다. 폰으로 열어보세요 |
 | 퍼널 목록에 페이지가 안 뜬다 | 아직 그 페이지에 방문 기록이 없습니다. 5번을 먼저 하세요 |

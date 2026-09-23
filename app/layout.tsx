@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
-import { Analytics } from "@vercel/analytics/next";
 import { site } from "@/content";
 import "./globals.css";
 
@@ -16,10 +15,11 @@ export const metadata: Metadata = {
   },
 };
 
-// Clarity 프로젝트 ID 가 있고, 프로덕션 배포일 때만 CCTV 를 답니다.
-// 프리뷰 배포에는 봇/크롤러가 돌아다녀서 세션 데이터가 지저분해집니다.
-const clarityId =
-  process.env.VERCEL_ENV === "production" ? process.env.NEXT_PUBLIC_CLARITY_ID : undefined;
+// Clarity 프로젝트 ID 가 있을 때만 CCTV 를 답니다.
+const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID;
+
+// Cloudflare Web Analytics 토큰 — Cloudflare 대시보드 → Analytics → Web Analytics 에서 발급
+const cfAnalyticsToken = process.env.NEXT_PUBLIC_CF_ANALYTICS_TOKEN;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -44,8 +44,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </footer>
 
-        {/* ⑥회차 · 계수기 — 이 한 줄이 방문 수를 셉니다 */}
-        <Analytics />
+        {/* ⑥회차 · 계수기 — Cloudflare Web Analytics. 배포 후 대시보드에서 토큰을 받아 환경변수로 넣으면 켜집니다 */}
+        {cfAnalyticsToken && (
+          <Script
+            id="cf-web-analytics"
+            strategy="afterInteractive"
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={`{"token": "${cfAnalyticsToken}"}`}
+          />
+        )}
 
         {/* ⑥회차 · CCTV — Clarity. 대시보드에서 받은 코드가 이것과 다르면 그쪽을 쓰세요 */}
         {clarityId && (
